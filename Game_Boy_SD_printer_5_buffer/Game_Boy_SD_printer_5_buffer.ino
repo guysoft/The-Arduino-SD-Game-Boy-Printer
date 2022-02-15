@@ -9,9 +9,9 @@ const int chipSelect = 4;
 int i,j,k,m;
 bool bit_sent,bit_read;
 byte byte_read,byte_sent,semibyte1,semibyte2;
-int clk = 2; // clock signal
-int TX = 3; // The data signal coming from the Arduino and goind to the printer (Sout on Arduino becomes Sin on the printer)
-int RX = 5;// The response bytes coming from printer going to Arduino (Sout from printer becomes Sin on the Arduino)
+int clk = 8; // clock signal
+int TX = 10; // The data signal coming from the Arduino and goind to the printer (Sout on Arduino becomes Sin on the printer)
+int RX = 9;// The response bytes coming from printer going to Arduino (Sout from printer becomes Sin on the Arduino)
 int pos = 1;
 int packet_absolute=0;
 int packet_number=0;
@@ -19,8 +19,8 @@ int mem_packets=9;
 char junk;
 // if you modify a command, the checksum bytes must be modified accordingly
 byte INIT[]={0x88,0x33,0x01,0x00,0x00,0x00,0x01,0x00,0x00,0x00}; //INT command
-//byte PRNT[]={0x88,0x33,0x02,0x00,0x04,0x00,0x01,0x00,0xE4,0x7F,0x6A,0x01,0x00,0x00}; //PRINT without feed lines, darker
-byte PRNT[]={0x88,0x33,0x02,0x00,0x04,0x00,0x01,0x00,0xE4,0x40,0x2B,0x01,0x00,0x00}; //PRINT without feed lines, default
+byte PRNT[]={0x88,0x33,0x02,0x00,0x04,0x00,0x01,0x00,0xE4,0x7F,0x6A,0x01,0x00,0x00}; //PRINT without feed lines, darker
+//byte PRNT[]={0x88,0x33,0x02,0x00,0x04,0x00,0x01,0x00,0xE4,0x40,0x2B,0x01,0x00,0x00}; //PRINT without feed lines, default
 //byte PRNT[]={0x88,0x33,0x02,0x00,0x04,0x00,0x01,0x00,0xE4,0x00,0xEB,0x00,0x00,0x00}; //PRINT without feed lines, lighter
 byte INQU[]={0x88,0x33,0x0F,0x00,0x00,0x00,0x0F,0x00,0x00,0x00}; //INQUIRY command
 byte EMPT[]={0x88,0x33,0x04,0x00,0x00,0x00,0x04,0x00,0x00,0x00}; //Empty data packet, mandatory for validate DATA packet
@@ -29,6 +29,8 @@ byte DATA_SD[649];// data buffer
 word checksum=0;
 
 void setup() {
+  digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
+  pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
 
   pinMode(clk, OUTPUT);
   pinMode(TX, OUTPUT);
@@ -45,6 +47,14 @@ void setup() {
   // if error message while SD inserted, check the CS pin number
   if (!SD.begin(chipSelect)) {
     Serial.println("SD failed");
+
+      
+      // but actually the LED is on; this is because
+      // it is active low on the ESP-01)
+      delay(1000);                      // Wait for a second
+      digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+      delay(2000);  
+    
     while (true);
   }
   delay(5000);
