@@ -6,11 +6,11 @@ clear;
 margin=3;% you can choose the number of blank lines between images here
 imagefiles = dir('./Images/*.png');% the default format is png, other are ignored
 nfiles = length(imagefiles);    % Number of files found
-fid=fopen('Hex_data.txt','w');
 
 for k=1:1:nfiles
     currentfilename = imagefiles(k).name;
     a=imread(['./Images/',currentfilename]);
+    fid=fopen(["/tmp/", currentfilename],'w');
     disp(['Converting image ',currentfilename,' in progress...'])
     figure(1)
     imagesc(a)
