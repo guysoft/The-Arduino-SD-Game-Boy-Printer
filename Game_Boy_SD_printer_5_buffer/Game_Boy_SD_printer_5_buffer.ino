@@ -9,9 +9,9 @@ const int chipSelect = 4;
 int i,j,k,m;
 bool bit_sent,bit_read;
 byte byte_read,byte_sent,semibyte1,semibyte2;
-int clk = 8; // clock signal
-int TX = 10; // The data signal coming from the Arduino and goind to the printer (Sout on Arduino becomes Sin on the printer)
-int RX = 9;// The response bytes coming from printer going to Arduino (Sout from printer becomes Sin on the Arduino)
+int clk = 16; // clock signal
+int TX = 4; // The data signal coming from the Arduino and goind to the printer (Sout on Arduino becomes Sin on the printer)
+int RX = 5;// The response bytes coming from printer going to Arduino (Sout from printer becomes Sin on the Arduino)
 int pos = 1;
 int packet_absolute=0;
 int packet_number=0;
